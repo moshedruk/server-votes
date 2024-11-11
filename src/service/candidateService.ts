@@ -1,54 +1,50 @@
-// // import { IUser } from "../interface/userInterface";
-// // import TodoModle from "../models/todoModel";
-// // import UserModle from "../models/userModel"
+import Candidate from "../models/Candidate";
+import CandidateModle from "../models/Candidate";
 
-// export const createUser = async (user:IUser):Promise<IUser>=>{
-//     try{
-//         // find  if user is already
-//         const existingUser = await UserModle.findOne({name: user.name}) as IUser;
-//         if(existingUser){
-//             if (existingUser.todos.includes(user.todos[0])) {
-//                 throw new Error('Title already exists for this user');
-//             }
-//             existingUser.todos.push(user.todos[0]);
-//             await TodoModle.updateOne(
-//                 { _id: user.todos[0] },  
-//                 { $set: { status: true } }  
-//             );
-//             console.log(user.todos[0]);
-//             await existingUser.save()
-//             return existingUser
-//         }
-//         // find if mission is already
-        
-//         // create new user and save it to the database  (we assume that user.name is unique)
-//         // i need to get mor informtion of newUser
-//        const {name,todos} = user 
-//        // find mission to create new status 
-       
-//        const dbUser = new UserModle({
-//        name,   
-//        todos            
-//        });
-//        await TodoModle.updateOne(
-//         { _id: user.todos[0] },  
-//         { $set: { status: true } }  
-//         );        
-//        await dbUser.save()
-//         return user;
-//     }catch(err){
-//         console.log(err);
-//        throw err
-//     }
-// }
-
-// export const GetUser = async() => {
-//     try{
-//         // find all users
-//         const list = await UserModle.find().populate("todos");
-//         return users;
-//     }catch(err){
-//         console.log(err);
-//         throw err
-//     }
-// }
+export const initDatabase = async () => {
+    try {
+      const cands = [
+        {
+          name: "John",
+          image: "https://randomuser.me/api/portraits/med/men/81.jpg",
+        },
+        {
+          name: "Johnny",
+          image: "https://randomuser.me/api/portraits/med/men/13.jpg",
+        },
+        {
+          name: "Johnnyiahoo",
+          image: "https://randomuser.me/api/portraits/med/men/83.jpg",
+        },
+        {
+          name: "Johnniel",
+          image: "https://randomuser.me/api/portraits/med/men/0.jpg",
+        },
+        {
+          name: "Johnny",
+          image: "https://randomuser.me/api/portraits/med/men/6.jpg",
+        },
+      ];
+  
+      for (const cand of cands) {
+        const newCand = new CandidateModle(cand);
+        await newCand.save();
+      }
+    } catch (err) {
+      console.log(
+        "Error accured while creating initial state of candidates",
+        err
+      );
+    }
+  };
+  
+  
+  export const getCandidateList = async () => {
+      try {
+          const list = await CandidateModle.find({})
+          return list
+      } catch (err) {
+          console.log(err)
+          throw err
+      }
+  }

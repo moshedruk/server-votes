@@ -16,7 +16,9 @@ export const login = async (req:Request<IloginDto>, res:Response) => {
 // Function for creating a new user in the database
 export const createNewUser = async(req:Request,res:Response)=>{
     try{
-       const newUser =  await createUser(req.body)       
+        console.log(req.body)
+       const newUser =  await createUser(req.body)  
+       // need token use here!     
        res.status(201).json({user: newUser,msg:'User created successfully'});       
     }catch(error){
         res.status(400).json((error as Error).message);       

@@ -6,7 +6,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
     const secretKey =  'defaultSecretKey';
     
     const token:string  = req.headers["authorization"] as string;
-    console.log({token})
+    // console.log({token})
     // console.log(req.headers)
     if (!token) {
       res.status(401).json({

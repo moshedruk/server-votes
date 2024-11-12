@@ -8,11 +8,14 @@ import jwt from "jsonwebtoken"
 
 export const loginUser = async (user: IloginDto) => {
     try {
+        console.log(user)
         const secretKey =  'defaultSecretKey';
         if (!secretKey) {
             throw new Error('JWT_SECRET is not defined');
           }
-        const userFromDB = await UserModle.findOne({ name: user.name })
+          
+        const userFromDB = await UserModle.findOne({ name: user.name }).lean();
+        console.log(userFromDB)
         if (!userFromDB) {
             throw new Error('User not found');
         }
@@ -20,7 +23,7 @@ export const loginUser = async (user: IloginDto) => {
         if (!match) {
             throw new Error('Invalid password');
         }
-        const token = await jwt.sign(
+        const token = jwt.sign(
             {
               user_id: userFromDB._id,
               isAdmin: userFromDB.isAdmin,
@@ -31,6 +34,7 @@ export const loginUser = async (user: IloginDto) => {
               expiresIn: "10m",
             }
           );
+          console.log(token)
           return {...userFromDB, token, password:"*******"};
     } catch (error) {
         console.log(error);
@@ -49,12 +53,11 @@ export const createUser = async (user: IUser): Promise<IUser> => {
         }
         const { name, password } = user
         const hashp = await bcrypt.hash(password, 10)
+        user.password = hashp
         // find mission to create new status 
 
-        const dbUser = new UserModle({
-            name,
-            password: hashp,
-        });
+        const dbUser = new UserModle(user
+       );
         await dbUser.save()
         return user;
     } catch (err) {

@@ -1,4 +1,4 @@
-import Candidate from "../models/Candidate";
+import Candidate, { ICandidate } from "../models/Candidate";
 import CandidateModle from "../models/Candidate";
 
 export const initDatabase = async () => {
@@ -48,3 +48,20 @@ export const initDatabase = async () => {
           throw err
       }
   }
+
+  export const createcandidate = async (candidate: ICandidate): Promise<ICandidate> => {
+    try {
+        console.log(candidate.name)
+        // find  if user is already
+        const existingUser = await CandidateModle.findOne({ name: candidate.name }) as ICandidate;
+        if (existingUser) {
+            throw new Error('candidate already exists');}
+        const dbnewcandidate = new CandidateModle(candidate
+       );
+        await dbnewcandidate.save()
+        return candidate;
+    } catch (err) {
+        console.log(err);
+        throw err
+    }
+}

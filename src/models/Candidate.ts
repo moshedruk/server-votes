@@ -3,7 +3,7 @@ import mongoose, { model, Schema } from "mongoose";
 export interface ICandidate extends Document {
     name: string;
     image: string;
-    votes: number;
+    votes?: number;
   }
   
   const candidateSchema = new Schema<ICandidate>({

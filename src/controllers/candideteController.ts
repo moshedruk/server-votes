@@ -1,11 +1,10 @@
 
 import { Request, Response } from "express";
-import { getCandidateList, initDatabase } from "../service/candidateService";
+import { createcandidate, getCandidateList, initDatabase } from "../service/candidateService";
 
 export const getList = async (req: Request, res: Response) => {
-    try {
-        console.log("jjjjjjjjjjjjjjj")
-        await initDatabase()
+    try {        
+        //await initDatabase()
       const list = await getCandidateList();
       res.json(list);
     } catch (err) {
@@ -14,14 +13,14 @@ export const getList = async (req: Request, res: Response) => {
     }
   };
 // // Function for creating a new user in the database
-// export const createNewUser = async(req:Request,res:Response)=>{
-//     try{
-//        const newUser =  await createUser(req.body)       
-//        res.status(201).json({user: newUser,msg:'User created successfully'});       
-//     }catch(err: any){
-//         res.status(400).json({msg:err.message});       
-//     }
-// }
+export const createNewCandidate = async(req:Request,res:Response)=>{
+    try{
+       const newCandidate =  await createcandidate(req.body)       
+       res.status(201).json({candidate: newCandidate,msg:'newCandidate created successfully'});       
+    }catch(err: any){
+        res.status(400).json({msg:err.message});       
+    }
+}
 
 // // Function for fetching all users from the database
 // export const getUsers = async(req:Request,res:Response)=>{

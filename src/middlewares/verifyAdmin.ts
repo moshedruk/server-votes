@@ -3,7 +3,9 @@ import jwt, { JsonWebTokenError } from "jsonwebtoken";
 
 export default (req: Request, res: Response, next: NextFunction) => {
   try {
-    const token = req.headers["authorization"];
+    const secretKey =  'defaultSecretKey';
+    const token:string  = req.headers["authorization"] as string;
+    console.log(token)
     if (!token) {
       res.status(401).json({
         err: "Token must be provieded",
@@ -11,7 +13,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
       return;
     }
     console.log(token)
-    const payload = jwt.verify(token[0], process.env.JWT_SECRET!);
+    const payload = jwt.verify(token, secretKey);
     (req as any).user = payload;
     if (!(payload as any).isAdmin) {
       res.status(403).json({
